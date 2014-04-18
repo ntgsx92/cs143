@@ -1,0 +1,50 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf390
+{\fonttbl\f0\fnil\fcharset0 Verdana;\f1\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red255\green255\blue255;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid1\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid1}
+{\list\listtemplateid2\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid101\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid2}
+{\list\listtemplateid3\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid201\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid3}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}{\listoverride\listid2\listoverridecount0\ls2}{\listoverride\listid3\listoverridecount0\ls3}}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\tx220\tx720\pardeftab720\li720\fi-720\sl320
+\ls1\ilvl0
+\f0\b\fs26 \cf0 \cb2 Describe any design decisions you made. These may be minimal for Lab 
+\f1\b0\fs24 \cb1 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+Two significant design decisions we made while completing this lab was to create our own iterator classes for the HeapPage and HeapFile classes respectively. This is because a standard iterator cast as type, Tuple (Iterator<Tuple>) is not equipped to parse and handle the data in a Tuple. \
+\
+A second design design we made was to use an array to hold our Fields in the Tuple class. We realized  while completing the skeleton function Iterator, that if we had created an arrayList to hold our Fields instead of an array, this iterator function would have been easier to implement. However, because our code had been written to handle an array of Fields, we implemented Iterator by wrapping our Fields array in a list and returning an iterator to this list.\
+\
+In the Catalog and BufferPool classes, we initially created HashMaps as private variables to map our data. However, we noticed later on that a ConcurrentHashMap library had been included and realized that a ConcurrentHashMap would better handle multiple functions accessing the same tables at once.\
+\
+\pard\pardeftab720\sl320
+
+\f0\b\fs26 \cf0 \cb2 Discuss and justify any changes you made to the API
+\b0 \
+\
+
+\f1\fs24 We did not make any significant changes to the API. \
+\
+\pard\tx220\tx720\pardeftab720\li720\fi-720\sl320
+\ls2\ilvl0
+\f0\b\fs26 \cf0 Describe any missing or incomplete elements of your code
+\b0 .\
+\
+\ls2\ilvl0
+\f1\fs24 There are no missing or incomplete elements of our code. \
+\ls2\ilvl0
+\f0\fs26 \
+\pard\tx220\tx720\pardeftab720\sl320
+\ls3\ilvl0
+\b \cf0 Describe how long you spent on the project, and whether there was anything you found particularly difficult or confusing.
+\b0 \
+\pard\pardeftab720\sl320
+
+\f1\fs24 \cf0 \cb1 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 We worked on this project for around 10 hours. Getting a comprehensive understanding of the different classes in SimpleDB and how they correlated and interacted with each other was one of the most difficult problems we faced. Furthermore, while debugging, it was particularly difficult to trace through the test code and figure out which of our functions was actually causing the error. This problem was exacerbated by the fact that we were not extremely familiar with Java and some of our errors were syntax or out of bounds errors in our Java implementation. \
+\
+Specifically, the most difficult classes to implement were HeapPage and HeapFile because they were difficult to comprehensively understand and we had to write our own iterators. The getPage function in BufferPool was also slightly confusing because our exception catching was trying to access out of the bounds of the data and we had to identify why. \
+}
