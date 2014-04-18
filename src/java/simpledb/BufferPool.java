@@ -1,6 +1,7 @@
 package simpledb;
 
 import java.io.*;
+import java.util.*;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,6 +22,8 @@ public class BufferPool {
 
     private static int pageSize = PAGE_SIZE;
     
+    private int m_numpages;
+    
     /** Default number of pages passed to the constructor. This is used by
     other classes. BufferPool should use the numPages argument to the
     constructor instead. */
@@ -32,7 +35,7 @@ public class BufferPool {
      * @param numPages maximum number of pages in this buffer pool.
      */
     public BufferPool(int numPages) {
-        // some code goes here
+        m_numpages = numPages;
     }
     
     public static int getPageSize() {
@@ -59,10 +62,22 @@ public class BufferPool {
      * @param pid the ID of the requested page
      * @param perm the requested permissions on the page
      */
-    public  Page getPage(TransactionId tid, PageId pid, Permissions perm)
+    public  Page getPage(TransactionId tid, PageId pid, Permissions perm){
+    	/*
         throws TransactionAbortedException, DbException {
-        // some code goes here
-        return null;
+    	Catalog new_catalog = Database.getCatalog();
+    	Iterator<Integer> catalog_it  = new_catalog.tableIdIterator();
+    	while(catalog_it.hasNext()){
+    		DbFile df= new_catalog.getDatabaseFile(catalog_it.next());
+    		if(df.readPage(pid) == null){
+    			throw new DbException("Can not find page with given pid");
+    		}
+    		else{
+    			Page cur_page = df.readPage(pid);
+    			if()
+    		}
+    	}*/
+    	return null;
     }
 
     /**
