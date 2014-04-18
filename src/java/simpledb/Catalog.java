@@ -22,9 +22,32 @@ public class Catalog {
      * Constructor.
      * Creates a new, empty catalog.
      */
+	private class Table
+    {
+        public String m_name;
+        public String m_pkey;
+    
+        public Table(String name, String pkey) {
+            m_name = name;
+            m_pkey = pkey;
+        }
+
+    } // End Private Class Table
+	
+	//map tables to file
+	private HashMap<Table, DbFile> m_tfiles;
+    //map file to table (by file ID Integer)
+	private HashMap<Integer, Table> m_ftables;
+	
+	/**
+     * Constructor.
+     * Creates a new, empty catalog.
+     */
     public Catalog() {
-        // some code goes here
+        m_tfiles = new HashMap<Table, DbFile>();
+        m_ftables = new HashMap<Integer, Table>();
     }
+
 
     /**
      * Add a new table to the catalog.
@@ -36,6 +59,12 @@ public class Catalog {
      * conflict exists, use the last table to be added as the table for a given name.
      */
     public void addTable(DbFile file, String name, String pkeyField) {
+    	assert( name != null);
+    	assert(file != null);
+    	assert(pkeyField != null);
+    	Table nt = new Table(name, pkeyField);
+    	m_tfiles.put(nt, file);
+    	m_ftables.put(file.getId(), nt);
         // some code goes here
     }
 
@@ -59,8 +88,16 @@ public class Catalog {
      * @throws NoSuchElementException if the table doesn't exist
      */
     public int getTableId(String name) throws NoSuchElementException {
-        // some code goes here
-        return 0;
+    	for (Table key : m_tfiles.keySet())
+    	{
+    		if(key.m_name == name)
+    		{
+    			return m_tfiles.get(key).getId();
+    		}
+        	
+        }
+    	
+    	throw new NoSuchElementException("Table " + name + "does not exist");
     }
 
     /**
@@ -71,7 +108,7 @@ public class Catalog {
      */
     public TupleDesc getTupleDesc(int tableid) throws NoSuchElementException {
         // some code goes here
-        return null;
+        return getDatabaseFile(tableid).getTupleDesc();
     }
 
     /**
@@ -82,27 +119,43 @@ public class Catalog {
      */
     public DbFile getDatabaseFile(int tableid) throws NoSuchElementException {
         // some code goes here
-        return null;
+    	if(m_ftables.containsKey(tableid))
+    	{
+    		return m_tfiles.get(m_ftables.get(tableid));
+    	}
+    	throw new NoSuchElementException( "DbFile with ID " + tableid + "does not exist");
     }
 
     public String getPrimaryKey(int tableid) {
         // some code goes here
-        return null;
+    	if(m_ftables.containsKey(tableid))
+    	{
+    		return m_ftables.get(tableid).m_pkey;
+    	}
+    	throw new NoSuchElementException( "DbFile with ID " + tableid + "does not exist");
     }
 
     public Iterator<Integer> tableIdIterator() {
         // some code goes here
-        return null;
+        Iterator<Integer> it = m_ftables.keySet().iterator();
+        return it;
     }
 
     public String getTableName(int id) {
         // some code goes here
-        return null;
+    	if(m_ftables.containsKey(id))
+    	{
+    		return m_ftables.get(id).m_name;
+    	}
+    	
+    	throw new NoSuchElementException( "DbFile with ID " + id + "does not exist");
     }
     
     /** Delete all tables from the catalog */
     public void clear() {
         // some code goes here
+    	m_tfiles.clear();
+    	m_ftables.clear();
     }
     
     /**
