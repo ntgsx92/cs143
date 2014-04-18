@@ -61,6 +61,7 @@ public class Catalog {
     public void addTable(DbFile file, String name, String pkeyField) {
     	assert( name != null);
     	assert(file != null);
+    	assert(pkeyField != null);
     	Table nt = new Table(name, pkeyField);
     	m_tfiles.put(nt, file);
     	m_ftables.put(file.getId(), nt);
