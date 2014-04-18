@@ -145,7 +145,7 @@ public class TupleDesc implements Serializable {
     		throw new NoSuchElementException();
     	}
         for(int i = 0; i < fields_num; i++){
-        	if(td_items[i].fieldName == name){
+        	if(td_items[i].fieldName!=null && td_items[i].fieldName.equals(name)){
         		return i;
         	}
         }
