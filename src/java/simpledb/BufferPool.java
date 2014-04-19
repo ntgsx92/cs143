@@ -1,6 +1,7 @@
 package simpledb;
 
 import java.io.*;
+
 import java.util.*;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,6 +25,8 @@ public class BufferPool {
     
     private int m_numpages;
     
+    private ConcurrentHashMap<PageId, Page> ccmap;
+    
     /** Default number of pages passed to the constructor. This is used by
     other classes. BufferPool should use the numPages argument to the
     constructor instead. */
@@ -36,6 +39,7 @@ public class BufferPool {
      */
     public BufferPool(int numPages) {
         m_numpages = numPages;
+        ccmap = new ConcurrentHashMap<PageId, Page>();
     }
     
     public static int getPageSize() {
@@ -62,22 +66,18 @@ public class BufferPool {
      * @param pid the ID of the requested page
      * @param perm the requested permissions on the page
      */
-    public  Page getPage(TransactionId tid, PageId pid, Permissions perm){
-    	/*
+    public  Page getPage(TransactionId tid, PageId pid, Permissions perm)
         throws TransactionAbortedException, DbException {
-    	Catalog new_catalog = Database.getCatalog();
-    	Iterator<Integer> catalog_it  = new_catalog.tableIdIterator();
-    	while(catalog_it.hasNext()){
-    		DbFile df= new_catalog.getDatabaseFile(catalog_it.next());
-    		if(df.readPage(pid) == null){
-    			throw new DbException("Can not find page with given pid");
+    	Page cur_page = ccmap.get(pid);
+    	if(cur_page == null){
+    		if(m_numpages <=ccmap.size()){
+    			throw new DbException("ccmap is full!");
     		}
-    		else{
-    			Page cur_page = df.readPage(pid);
-    			if()
-    		}
-    	}*/
-    	return null;
+    		Catalog cur_catalog = Database.getCatalog();
+    		cur_page = cur_catalog.getDatabaseFile(pid.getTableId()).readPage(pid);
+    		ccmap.put(pid, cur_page);
+    	}
+    	return cur_page;
     }
 
     /**

@@ -14,7 +14,7 @@ public class HeapFileIterator implements DbFileIterator{
 	private boolean isopen;
 	
 	
-	public HeapFileIterator(TransactionId trans_id, HeapFile heap_f){
+	public HeapFileIterator(TransactionId trans_id, HeapFile heap_f) throws DbException, TransactionAbortedException{
 		m_heapf = heap_f;
 		m_transid = trans_id;
 		cur_pgno = 0;
@@ -22,13 +22,13 @@ public class HeapFileIterator implements DbFileIterator{
 		boolean isopen = false;
 	}
 	
-    private Iterator<Tuple> get_iter(int pg_no){
+    private Iterator<Tuple> get_iter(int pg_no) throws DbException, TransactionAbortedException{
         HeapPageId pid = new HeapPageId(m_heapf.getId(), pg_no);
         HeapPage page = (HeapPage) Database.getBufferPool().getPage(m_transid, pid, Permissions.READ_ONLY);
         return page.iterator();
     }
 	
-	public Tuple next() throws NoSuchElementException {
+	public Tuple next() throws NoSuchElementException, TransactionAbortedException,DbException {
 		if(hasNext()){
 			return tuple_it.next();
 		}
@@ -38,11 +38,11 @@ public class HeapFileIterator implements DbFileIterator{
 		
 	}
 	
-	public boolean hasNext() {
+	public boolean hasNext() throws DbException, TransactionAbortedException{
 		if(!isopen){
 			return false;
 		}
-		if(!tuple_it.hasNext()){
+		if(tuple_it.hasNext()){
 			return true;
 		}
 		else if(cur_pgno < m_heapf.numPages() - 1 ){

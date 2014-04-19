@@ -40,10 +40,10 @@ public class HeapPageId implements PageId {
      * @see BufferPool
      */
     public int hashCode() {
-    	return 5;
         // some code goes here
-    	/*String concat = String.valueOf(m_pgNo) + String.valueOf(m_tableId);
-    	return Integer.parseInt(concat);*/
+    	//String concat = m_pgNo +""+m_tableId;
+    	//return Integer.parseInt(concat);
+         return (m_tableId << 16) | (m_pgNo & 0xFFFF);
     }
 
     /**

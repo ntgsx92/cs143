@@ -31,15 +31,15 @@ public class SeqScan implements DbIterator {
     private int m_tableid;
     private String m_tableAlias;
     private DbFile m_dbfile;
-	private DbFileIterator m_it;
+    private DbFileIterator m_it;
    
     public SeqScan(TransactionId tid, int tableid, String tableAlias) {
         // some code goes here
-    	m_tid = tid;
-    	m_tableid = tableid;
-    	m_tableAlias = tableAlias;
-    	m_dbfile = Database.getCatalog().getDatabaseFile(tableid);
-    	m_it = m_dbfile.iterator(tableid);
+        m_tid = tid;
+        m_tableid = tableid;
+        m_tableAlias = tableAlias;
+        m_dbfile = Database.getCatalog().getDatabaseFile(tableid);
+        m_it = m_dbfile.iterator(tid);
     }
 
     /**
@@ -48,7 +48,7 @@ public class SeqScan implements DbIterator {
      *       be the actual name of the table in the catalog of the database
      * */
     public String getTableName() {
-    	//some code goes here
+        //some code goes here
         return Database.getCatalog().getTableName(m_tableid);
     }
     
@@ -75,10 +75,10 @@ public class SeqScan implements DbIterator {
      */
     public void reset(int tableid, String tableAlias) {
         // some code goes here
-    	m_tableid = tableid;
-    	m_tableAlias = tableAlias;
-    	m_dbfile = Database.getCatalog().getDatabaseFile(tableid);
-    	m_it = m_dbfile.iterator(tableid);
+        m_tableid = tableid;
+        m_tableAlias = tableAlias;
+        m_dbfile = Database.getCatalog().getDatabaseFile(tableid);
+        m_it = m_dbfile.iterator(m_tid);
 
     }
 
@@ -88,11 +88,11 @@ public class SeqScan implements DbIterator {
 
     public void open() throws DbException, TransactionAbortedException {
         // some code goes here
-    	if (m_dbfile == null || m_it ==null )
-    	{
-    		throw new TransactionAbortedException();
-    	}
-    	m_it.open();
+        if (m_dbfile == null || m_it ==null )
+        {
+            throw new TransactionAbortedException();
+        }
+        m_it.open();
     }
 
     /**
@@ -110,10 +110,10 @@ public class SeqScan implements DbIterator {
         Type[] types = new Type[m_dbfile.getTupleDesc().numFields()];
         
         for (int i = 0; i < m_dbfile.getTupleDesc().numFields(); i++)
-       	{
-        	names[i]=m_dbfile.getTupleDesc().getFieldName(i);
-        	types[i]=m_dbfile.getTupleDesc().getFieldType(i);
-   		}
+        {
+            names[i]=m_dbfile.getTupleDesc().getFieldName(i);
+            types[i]=m_dbfile.getTupleDesc().getFieldType(i);
+        }
         
         TupleDesc td = new TupleDesc(types, names);
         return td;
@@ -121,32 +121,32 @@ public class SeqScan implements DbIterator {
 
     public boolean hasNext() throws TransactionAbortedException, DbException {
         // some code goes here
-    	try{
-    		return m_it.hasNext();
-    	}
-    	catch (TransactionAbortedException e){ return false;}
-    	
+        try{
+            return m_it.hasNext();
+        }
+        catch (TransactionAbortedException e){ return false;}
+        
     }
 
     public Tuple next() throws NoSuchElementException,
             TransactionAbortedException, DbException {
         // some code goes here
-    		return m_it.next();
-    	
+            return m_it.next();
+        
 
-    	
+        
     }
 
     public void close() {
         // some code goes here
-    	m_it.close();
-    	
+        m_it.close();
+        
     }
 
     public void rewind() throws DbException, NoSuchElementException,
             TransactionAbortedException {
         // some code goes here
-    		m_it.rewind();
+            m_it.rewind();
     }
   
     
