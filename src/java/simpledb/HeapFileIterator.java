@@ -47,7 +47,8 @@ public class HeapFileIterator implements DbFileIterator{
 		}
 		else if(cur_pgno < m_heapf.numPages() - 1 ){
 			cur_pgno++;
-			return get_iter(cur_pgno).hasNext();
+			tuple_it = get_iter(cur_pgno);
+			return tuple_it.hasNext();
 		}
 		else{
 			return false;

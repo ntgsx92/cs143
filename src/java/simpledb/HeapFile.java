@@ -17,10 +17,10 @@ import java.nio.*;
 public class HeapFile implements DbFile {
 
 
-	private File m_file;
-	
-	private TupleDesc m_td;
-	
+    private File m_file;
+    
+    private TupleDesc m_td;
+    
     /**
      * Constructs a heap file backed by the specified file.
      * 
@@ -39,7 +39,7 @@ public class HeapFile implements DbFile {
      * @return the File backing this HeapFile on disk.
      */
     public File getFile() {
-    	return m_file;
+        return m_file;
     }
 
     /**
@@ -52,7 +52,7 @@ public class HeapFile implements DbFile {
      * @return an ID uniquely identifying this HeapFile.
      */
     public int getId() {
-    	return m_file.getAbsoluteFile().hashCode();
+        return m_file.getAbsoluteFile().hashCode();
     }
 
     /**
@@ -61,22 +61,23 @@ public class HeapFile implements DbFile {
      * @return TupleDesc of this DbFile.
      */
     public TupleDesc getTupleDesc() {
-    	return m_td;
+        return m_td;
     }
 
     // see DbFile.java for javadocs
     public Page readPage(PageId pid) {
-    	int offset = BufferPool.PAGE_SIZE * pid.pageNumber();
-    	byte[] b = new byte[(int)m_file.length()];
-    	try{
-    		FileInputStream fis = new FileInputStream(m_file);
-    		fis.read(b, offset, BufferPool.PAGE_SIZE);
-    		fis.close();
-    		return new HeapPage((HeapPageId)pid, b);
-    	}catch(IOException ioe){
-    		ioe.printStackTrace();
-    		return null;
-    	}
+        int offset = BufferPool.PAGE_SIZE * pid.pageNumber();
+        byte[] b = new byte[BufferPool.PAGE_SIZE];
+        try{
+            InputStream is = new FileInputStream(m_file);
+            is.skip(offset);
+            is.read(b, 0, BufferPool.PAGE_SIZE);
+            is.close();
+            return new HeapPage((HeapPageId)pid, b);
+        }catch(IOException ioe){
+            ioe.printStackTrace();
+            return null;
+        }
     }
 
     // see DbFile.java for javadocs
@@ -89,7 +90,7 @@ public class HeapFile implements DbFile {
      * Returns the number of pages in this HeapFile.
      */
     public int numPages() {
-    	return (int)Math.ceil(m_file.length()/BufferPool.PAGE_SIZE);
+        return (int)Math.ceil(m_file.length()/BufferPool.PAGE_SIZE);
     }
 
     // see DbFile.java for javadocs
@@ -110,16 +111,16 @@ public class HeapFile implements DbFile {
 
     // see DbFile.java for javadocs
     public DbFileIterator iterator(TransactionId tid){
-    	try{
-			return new HeapFileIterator(tid, this);
-    	}catch(DbException dbe){
-    		dbe.printStackTrace();
-    	}catch(TransactionAbortedException transe){
-    		transe.printStackTrace();
-    	}catch(NoSuchElementException nosuche){
-    		nosuche.printStackTrace();
-    	}
-    	return null;
+        try{
+            return new HeapFileIterator(tid, this);
+        }catch(DbException dbe){
+            dbe.printStackTrace();
+        }catch(TransactionAbortedException transe){
+            transe.printStackTrace();
+        }catch(NoSuchElementException nosuche){
+            nosuche.printStackTrace();
+        }
+        return null;
     }
     
 
